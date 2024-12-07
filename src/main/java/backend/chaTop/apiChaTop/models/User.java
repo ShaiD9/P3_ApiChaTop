@@ -1,9 +1,7 @@
 package backend.chaTop.apiChaTop.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,7 +10,8 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "users")
-@Data // Lombok annotations for getters/setters
+@Getter
+@Setter// Lombok annotations for getters/setters
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
