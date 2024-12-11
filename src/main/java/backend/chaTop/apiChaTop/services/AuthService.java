@@ -16,6 +16,12 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
     // Votre logique d'authentification, comme l'encryptage du mot de passe
     public String authenticate(String password) {
         // Utilisation du passwordEncoder ici
@@ -24,8 +30,10 @@ public class AuthService {
         return encodedPassword;
     }
 
-    public String authenticateUser(LoginRequest loginRequest) {
-        throw new UnsupportedOperationException("Unimplemented method 'authenticateUser'");
+    public String authenticateUser(LoginRequest loginRequest) throws Exception {
+        if (userService.userExist(loginRequest.getEmail())) {
+            return jwtUtil.generateToken(loginRequest.getEmail());
+        }
+        return "Login n'existe pas";
     }
-    
 }

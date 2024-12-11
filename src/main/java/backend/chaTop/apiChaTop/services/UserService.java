@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -27,10 +29,17 @@ public class UserService {
         }
 
         // Créer un nouvel utilisateur
-
         // Sauvegarder l'utilisateur dans la base de données
         userRepository.save(mapper.mapFromRegisterDto(registerRequest));
 
         return "Utilisateur enregistré avec succès";
+    }
+
+    public boolean userExist(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

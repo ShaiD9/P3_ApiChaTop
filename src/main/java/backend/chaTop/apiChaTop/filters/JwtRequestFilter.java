@@ -35,16 +35,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwt = null;
 
-        // Ignore JWT validation for login and register endpoints
-        if ("/auth/register".equals(request.getServletPath()) || "/auth/login".equals(request.getServletPath())) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
-            username = jwtUtil.extractUsername(jwt);
-        }
+        jwt = authorizationHeader.substring(7);
+        username = jwtUtil.extractUsername(jwt);
+
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
@@ -55,6 +53,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }
+
+            if(jwtUtil.isTokenExpired(jwt)) {
+                String newToken = jwtUtil.generateToken(userDetails.getUsername());
+                response.setHeader("Authorization", "Bearer " + newToken);
             }
         }
 

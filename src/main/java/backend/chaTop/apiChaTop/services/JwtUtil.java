@@ -1,13 +1,18 @@
 package backend.chaTop.apiChaTop.services;
 
+import backend.chaTop.apiChaTop.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.Map;
 import java.util.function.Function;
 
 @Component
@@ -19,10 +24,11 @@ public class JwtUtil {
     // Method to generate the token based on email
     public String generateToken(String email) {
         return Jwts.builder()
+                //.addClaims(Map.of("user",user))
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Expires in 10 hours
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(SignatureAlgorithm.NONE,getSignInKey())
                 .compact();
     }
 
@@ -46,12 +52,21 @@ public class JwtUtil {
                 .getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    private SecretKey getSignInKey() {
+        try {
+            byte[] keyBytes = Decoders.BASE64.decode(secret);
+            return Keys.hmacShaKeyFor(keyBytes);
+        } catch (Exception e) {
+            throw new RuntimeException("Error decoding the secret key");
+        }
     }
 }

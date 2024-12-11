@@ -15,17 +15,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
+    @Autowired
     private final AuthService authService;
+    @Autowired
     private final UserService userService;
 
     // Route pour login
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {
         String token = authService.authenticateUser(loginRequest);
         return ResponseEntity.ok(new LoginResponse(token));  // Utilisation du constructeur avec token
     }
 
-    // Route pour register (à ajouter si nécessaire)
+    // Route pour register
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.ok(userService.registerUser(registerRequest));
