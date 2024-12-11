@@ -11,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RentalService {
     @Autowired
@@ -27,5 +29,9 @@ public class RentalService {
         final User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         rentalCreation.setOwner_id(user.getId());
         return rentalRepository.save(rentalMapper.mapFromRentalCreationDto(rentalCreation));
+    }
+
+    public List<Rental> getAll() {
+        return rentalRepository.findAll();
     }
 }

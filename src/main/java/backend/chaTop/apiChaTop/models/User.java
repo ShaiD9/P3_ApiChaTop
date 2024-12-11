@@ -1,5 +1,8 @@
 package backend.chaTop.apiChaTop.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,11 +29,11 @@ public class User implements UserDetails {
         return password;
     }
 
-    @OneToMany(mappedBy = "owner_id")
+    @OneToMany(mappedBy = "owner_id", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Rental> rental;
 
     @Id
-    //@OneToMany(mappedBy = "owner_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 

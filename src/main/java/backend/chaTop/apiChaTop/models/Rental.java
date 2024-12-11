@@ -1,5 +1,6 @@
 package backend.chaTop.apiChaTop.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,6 +41,7 @@ public class Rental {
     private Integer owner_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name = "owner_id")
     @PrimaryKeyJoinColumn()
     private User owner;
