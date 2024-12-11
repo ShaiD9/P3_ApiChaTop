@@ -3,6 +3,7 @@ package backend.chaTop.apiChaTop.mappers;
 import backend.chaTop.apiChaTop.dto.RegisterRequest;
 import backend.chaTop.apiChaTop.dto.RentalCreation;
 import backend.chaTop.apiChaTop.models.Rental;
+import backend.chaTop.apiChaTop.models.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +17,9 @@ public class RentalMapper {
         rental.setPrice(rentalCreation.getPrice());
         rental.setPicture(rentalCreation.getPicture());
         rental.setDescription(rentalCreation.getDescription());
+        User owner = new User();
+        owner.setId(rentalCreation.getOwner_id());
+        rental.setOwner(owner);
         rental.setOwner_id(rentalCreation.getOwner_id());
 
         return rental;

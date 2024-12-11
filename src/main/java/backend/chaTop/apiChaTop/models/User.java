@@ -16,6 +16,7 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter// Lombok annotations for getters/setters
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
@@ -57,6 +58,6 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return email;
     }
 }

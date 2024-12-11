@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
@@ -28,7 +30,7 @@ public class JwtUtil {
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Expires in 10 hours
-                .signWith(SignatureAlgorithm.NONE,getSignInKey())
+                .signWith(SignatureAlgorithm.HS256,getSignInKey())
                 .compact();
     }
 
@@ -47,7 +49,8 @@ public class JwtUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(secret)
+                .setSigningKey(getSignInKey())
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
@@ -63,7 +66,7 @@ public class JwtUtil {
 
     private SecretKey getSignInKey() {
         try {
-            byte[] keyBytes = Decoders.BASE64.decode(secret);
+            byte[] keyBytes = Base64.getDecoder().decode(secret);
             return Keys.hmacShaKeyFor(keyBytes);
         } catch (Exception e) {
             throw new RuntimeException("Error decoding the secret key");

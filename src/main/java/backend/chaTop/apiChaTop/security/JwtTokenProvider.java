@@ -31,6 +31,7 @@ public class JwtTokenProvider {
         try {
             Jwts.parser()
                 .setSigningKey(secretKey)
+                .build()
                 .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
@@ -42,6 +43,7 @@ public class JwtTokenProvider {
     public String getEmailFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(secretKey)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getSubject();
