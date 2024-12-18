@@ -23,4 +23,15 @@ public class RentalMapper {
 
         return rental;
     }
+
+    public void updateRentalFromDto(Rental rental, RentalCreation rentalCreation) {
+        rental.setName(rentalCreation.getName());
+        rental.setSurface(rentalCreation.getSurface());
+        rental.setPrice(rentalCreation.getPrice());
+        rental.setPicture(rentalCreation.getPicture());
+        rental.setDescription(rentalCreation.getDescription());
+        User owner = new User();
+        owner.setId(rentalCreation.getOwner_id());
+        rental.setOwner(owner);
+    }
 }
