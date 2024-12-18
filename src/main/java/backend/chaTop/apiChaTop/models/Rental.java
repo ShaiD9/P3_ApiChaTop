@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "rentals")
 @Getter
-@Setter// Lombok annotations for getters/setters
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Rental {

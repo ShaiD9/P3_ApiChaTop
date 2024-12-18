@@ -1,5 +1,6 @@
 package backend.chaTop.apiChaTop.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,22 +11,27 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 
-@Entity
-@Table(name = "messages")
 @Getter
 @Setter
+@Entity
+@Table(name = "messages")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Message {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Id
-    private Integer rental_id;
+    @ManyToOne
+    @JoinColumn(name = "rental_id")
+    @JsonIgnore
+    private Rental rental;
 
-    @Id
-    private Integer user_id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 
     @Column(nullable = false)
     private String message;

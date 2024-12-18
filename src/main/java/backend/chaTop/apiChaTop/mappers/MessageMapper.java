@@ -1,19 +1,19 @@
 package backend.chaTop.apiChaTop.mappers;
 
-import backend.chaTop.apiChaTop.dto.RentalCreation;
+import backend.chaTop.apiChaTop.dto.MessageDTO;
 import backend.chaTop.apiChaTop.models.Message;
 import backend.chaTop.apiChaTop.models.Rental;
+import backend.chaTop.apiChaTop.models.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MessageMapper {
-//    public Message mapFromMessageCreationDto(MessageCreation messageCreation) {
-//
-//        Message message = new Message();
-//        message.rental_id(messageCreation.getName());
-//        message.user_id(messageCreation.getSurface());
-//        message.message(messageCreation.getPrice());
-//
-//        return message;
-//    }
+
+    public Message mapFromMessageDTO(MessageDTO messageDTO, Rental rental, User user) {
+        Message message = new Message();
+        message.setRental(rental);
+        message.setUser(user);
+        message.setMessage(messageDTO.getMessage());
+        return message;
+    }
 }

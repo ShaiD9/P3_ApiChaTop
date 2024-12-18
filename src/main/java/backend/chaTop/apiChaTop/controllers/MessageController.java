@@ -2,8 +2,11 @@ package backend.chaTop.apiChaTop.controllers;
 
 import backend.chaTop.apiChaTop.dto.LoginRequest;
 import backend.chaTop.apiChaTop.dto.LoginResponse;
+import backend.chaTop.apiChaTop.dto.MessageDTO;
+import backend.chaTop.apiChaTop.models.Message;
 import backend.chaTop.apiChaTop.services.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,10 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/messages")
 public class MessageController {
-    private final MessageService messageService;
 
-//    @PostMapping("/create")
-//    public  throws Exception {
-//
-//    }
+    @Autowired
+    private MessageService messageService;
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createMessage(@RequestBody MessageDTO messageDTO) {
+        Message message = messageService.createMessage(messageDTO);
+        return ResponseEntity.status(201).body(message);
+    }
 }
