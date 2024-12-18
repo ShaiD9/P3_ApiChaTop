@@ -45,4 +45,11 @@ public class AuthController {
         UserDTO userDTO = new UserDTO(user.getId(), user.getEmail(), user.getName());
         return ResponseEntity.ok(userDTO);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        UserDTO userDTO = new UserDTO(user.getId(), user.getEmail(), user.getName());
+        return ResponseEntity.ok(userDTO);
+    }
 }
