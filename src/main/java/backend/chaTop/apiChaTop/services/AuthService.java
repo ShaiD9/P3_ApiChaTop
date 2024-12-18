@@ -24,9 +24,7 @@ public class AuthService {
 
     // Votre logique d'authentification, comme l'encryptage du mot de passe
     public String authenticate(String password) {
-        // Utilisation du passwordEncoder ici
         String encodedPassword = passwordEncoder.encode(password);
-        // Logique de validation etc.
         return encodedPassword;
     }
 

@@ -5,6 +5,7 @@ import backend.chaTop.apiChaTop.mappers.UserMapper;
 import backend.chaTop.apiChaTop.models.User;
 import backend.chaTop.apiChaTop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +23,10 @@ public class UserService {
     @Autowired
     private UserMapper mapper;
 
-    // Méthode d'enregistrement
     public String registerUser(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new RuntimeException("Email déjà utilisé");
         }
-
-        // Créer un nouvel utilisateur
-        // Sauvegarder l'utilisateur dans la base de données
         userRepository.save(mapper.mapFromRegisterDto(registerRequest));
 
         return "Utilisateur enregistré avec succès";
@@ -41,5 +38,10 @@ public class UserService {
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public User getAuthenticatedUser(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur introuvable avec l'email : " + email));
     }
 }

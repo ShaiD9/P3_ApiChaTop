@@ -41,17 +41,13 @@ public class RentalService {
     }
 
     public Rental updateRental(Long id, RentalCreation rentalCreation) {
-        // Vérifie que l'utilisateur connecté est le propriétaire
         final String username = SecurityContextHolder.getContext().getAuthentication().getName();
         final User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         rentalCreation.setOwner_id(user.getId());
-        // Récupère le Rental existant
         Rental existingRental = rentalRepository.findById(Math.toIntExact(id))
                 .orElseThrow(() -> new IllegalArgumentException("Rental not found with id: " + id));
-        // Applique les mises à jour depuis le DTO
         rentalMapper.updateRentalFromDto(existingRental, rentalCreation);
-        // Sauvegarde et retourne le Rental mis à jour
         return rentalRepository.save(existingRental);
     }
 }
